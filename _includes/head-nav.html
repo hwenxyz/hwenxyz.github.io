@@ -1,23 +1,23 @@
-<div id="title" class="text-center">    
+<div id="title" class="text-center">
     <h1><a href="{{ site.baseurl }}/">{{ site.title | default: site.github.repository_name }}</a></h1>
     <p>{{ site.tagline | default: site.description | default: site.github.project_tagline }}</p>
-    <hr>
 </div>
-<nav class="navbar navbar-expand-lg bg-body-tertiary navbar-fixed-top">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="{{ site.baseurl }}/">{{ site.title | default: site.github.repository_name }}</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
-        </li>
-        <!--
+<nav class="navbar navbar-expand-lg bg-body-tertiary navbar-fixed-top mb-4">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{{ site.baseurl }}/">{{ site.title | default: site.github.repository_name }}</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                </li>
+                <!--
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Dropdown
@@ -30,17 +30,18 @@
           </ul>
         </li>
         -->
-        <li class="nav-item">
-          <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-        </li>
-      </ul>
-      <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="搜索" aria-label="Search"/>
-        <button class="btn btn-outline-success" type="submit">搜索</button>
-      </form>
+                <li class="nav-item">
+                    <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                </li>
+            </ul>
+            <form class="d-flex" role="search">
+                <input class="form-control me-2" type="search" placeholder="搜索" aria-label="Search" />
+                <button class="btn btn-outline-success" type="submit">搜索</button>
+            </form>
+        </div>
     </div>
-  </div>
 </nav>
+<hr>
 <!--
 <div id="nav" class="mb-4">
     <ul class="nav justify-content-center">
