@@ -12,18 +12,26 @@
 <body>
   <div class="container-fluid">
     {% include head-nav.html %}
-    <div class="card-group mt-3">
-    {% for post in site.posts %}
-    <div class="card mb-3" >
-      <div class="card-body">
-        <h5 class="card-title">{{ post.title }}</h5>
-        <h6 class="card-subtitle mb-2 text-body-secondary">by {{ post.author | default: "浑水摸鱼" }} {{ post.date | date: "%Y-%m-%d" }}</h6>
-        <p class="card-text">{{ post.excerpt }}</p>
-        <a href="{{ post.url }}" class="btn btn-primary" target="_blank">阅读</a>
+    
+      {% for post in site.posts %}
+      {% if forloop.index0%4 == 0 %}
+      <div class="row">
+        {% endif %}
+        <div class="card col-3 mb-3">
+          <div class="card-body">
+            <h5 class="card-title">{{ post.title }}</h5>
+            <h6 class="card-subtitle mb-2 text-body-secondary">by {{ post.author | default: "浑水摸鱼" }} {{ post.date |
+              date:
+              "%Y-%m-%d" }}</h6>
+            <p class="card-text">{{ post.excerpt }}</p>
+            <a href="{{ post.url }}" class="btn btn-primary" target="_blank">阅读</a>
+          </div>
+        </div>
+        {% if forloop.index0%4 == 0 %}
       </div>
-    </div>
-    {% endfor %}
-    </div>
+      {% endif %}
+      {% endfor %}
+    
   </div>
 </body>
 
