@@ -3,3 +3,4 @@ description: 江畔何人初见月，江月何年初照人？
 author: 浑水摸鱼
 increamental: true
 permalink: :year/:title
+page_excerpts: true
