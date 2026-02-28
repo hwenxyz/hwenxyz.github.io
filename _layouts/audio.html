@@ -24,27 +24,20 @@
 <body>
     <div class="container-fluid">
         {% include head-nav.html %}
-        <div class="row">
-            <div class="col-12">
-                <div class="audio-item">
-                    <span>274 陪读1</span>
-                    <audio>
-                        <source src="{{ '/assets/audio/274 陪读1.mp3' | relative_url }}" type="audio/mpeg">
-                    </audio>
-                </div>
-            </div>
-        </div>
+        <ol class="list-group list-group-numbered">
 
-        <div class="row">
-            <div class="col-12">
-                <div class="audio-item">
-                    <span>274 陪读2</span>
+            {% for audio in site.data.audio %}
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto audio-item">
+                    <div class="fw-bold">{{ audio.name }}</div>
                     <audio>
-                        <source src="{{ '/assets/audio/274 陪读2.mp3' | relative_url }}" type="audio/mpeg">
+                        <source src="{{ audio.link | relative_url }}" type="audio/mpeg">
                     </audio>
                 </div>
-            </div>
-        </div>
+            </li>
+            {% endfor %}
+        </ol>
+
         {% include foot.html %}
     </div>
 

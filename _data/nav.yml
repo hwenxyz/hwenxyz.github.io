@@ -6,5 +6,7 @@
     link: https://github.com
   - name: Jekyll
     link: https://jekyllrb.com
+- name: Audio
+  link: /audio
 - name: About
   link: /about
