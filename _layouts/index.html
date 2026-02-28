@@ -14,7 +14,7 @@
     {% include head-nav.html %}
     <table class="table .table-borderless card-table">
       {% tablerow post in site.posts cols:4 %}
-      <div class="card mb-3">
+      <div class="card mb-3" style="width:18rem">
         <div class="card-body">
           <h5 class="card-title"><a href="{{ post.url }}" class="text-decoration-none">{{ post.title }}</a></h5>
           <h6 class="card-subtitle mb-2 text-body-secondary">by {{ post.author | default: "浑水摸鱼" }} {{ post.date |
