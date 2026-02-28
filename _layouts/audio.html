@@ -24,7 +24,7 @@
 <body>
     <div class="container-fluid">
         {% include head-nav.html %}
-        <ol class="list-group list-group-numbered">
+        <ul class="list-group list-group-nostyle">
 
             {% for audio in site.static_files %}
             {% if audio.path contains "assets/audio" %}
@@ -40,7 +40,7 @@
             </li>
             {% endif %}
             {% endfor %}
-        </ol>
+        </ul>
 
         {% include foot.html %}
     </div>
