@@ -24,7 +24,7 @@
                         {{ item.name }}
                     </a>
                     <ul class="dropdown-menu">
-                        {% for subitem in item %}
+                        {% for subitem in item.subitems %}
                         {% if subitem.link %}
                         <li><a class="dropdown-item" href="{{ subitem.link }}">{{ subitem.name }}</a></li>
                         {% endif %}
@@ -32,7 +32,7 @@
                     </ul>
                 </li>
                 {% endif %}
-                
+
                 {% endfor %}
                
                 <!--

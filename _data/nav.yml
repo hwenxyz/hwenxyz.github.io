@@ -1,6 +1,7 @@
 - name: Home
   link: /
 - name: Resources
+  subitems:
   - name: GitHub
     link: https://github.com
   - name: Jekyll
