@@ -13,7 +13,7 @@
   <div class="container-fluid">
     {% include head-nav.html %}
     <table class="table .table-borderless card-table">
-      {% tablerow post in site.posts cols:4 %}
+      {% tablerow post in site.posts cols:8 %}
       <div class="card mb-3">
         <img class="card-img-top" src="{{ post.image | default: '/assets/images/post-image-default.jpg' }}" alt="Post Image">
         <div class="card-body">
