@@ -23,7 +23,7 @@
                         const results = data.filter(item => item.title.toLowerCase().includes(query.toLowerCase()));
                         if (results.length > 0) {
                             const html = "<ul class='list-unstyled'>" + 
-                                results.map(result => `<li class="mb-3"><a href="${result.url}" class="text-decoration-none">${result.title}</a><p class="text-muted small">${result.excerpt}</p></li>`).join('') 
+                                results.map(result => `<li class="mb-3"><a href="${result.url}" class="text-decoration-none" target="_blank">${result.title}</a><p class="text-muted small">${result.excerpt}</p></li>`).join('') 
                                 + "</ul>";
                             searchResults.innerHTML = html;
                         } else {

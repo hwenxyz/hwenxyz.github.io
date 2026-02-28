@@ -5,7 +5,7 @@
 </div>
 <nav class="navbar navbar-expand-lg bg-body-tertiary navbar-fixed-top mb-4">
     <div class="container-fluid">
-        <a class="navbar-brand" href="{{ site.baseurl }}/">{{ site.title | default: site.github.repository_name }}</a>
+        <a class="navbar-brand" href="{{ site.baseurl }}/" target="_blank">{{ site.title | default: site.github.repository_name }}</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -15,7 +15,7 @@
                 {% for item in site.data.nav %}
                 {% if item.link %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ item.link }}">{{ item.name }}</a>
+                    <a class="nav-link" href="{{ item.link }}" target="_blank">{{ item.name }}</a>
                 </li>
                 {% else %}
                 <li class="nav-item dropdown">
@@ -26,7 +26,7 @@
                     <ul class="dropdown-menu">
                         {% for subitem in item.subitems %}
                         {% if subitem.link %}
-                        <li><a class="dropdown-item" href="{{ subitem.link }}">{{ subitem.name }}</a></li>
+                        <li><a class="dropdown-item" href="{{ subitem.link }}" target="_blank">{{ subitem.name }}</a></li>
                         {% endif %}
                         {% endfor %}
                     </ul>
