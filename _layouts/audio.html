@@ -13,9 +13,9 @@
     <script src="https://cdn.jsdelivr.net/gh/greghub/green-audio-player/dist/js/green-audio-player.min.js"></script>
     <script>
         $(window).on("load", function () {
-            new GreenAudioPlayer(".audio-item", {
-                stopOthersOnPlay: true,
-                showDownloadButton: true,
+            GreenAudioPlayer.init({
+                selector: '.audio-item',
+                stopOthersOnPlay: true
             });
         });
     </script>
@@ -27,6 +27,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="audio-item">
+                    <span>274 陪读1</span>
                     <audio>
                         <source src="{{ '/assets/audio/274 陪读1.mp3' | relative_url }}" type="audio/mpeg">
                     </audio>
@@ -37,6 +38,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="audio-item">
+                    <span>274 陪读2</span>
                     <audio>
                         <source src="{{ '/assets/audio/274 陪读2.mp3' | relative_url }}" type="audio/mpeg">
                     </audio>
