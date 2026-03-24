@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 560" role="img" aria-labelledby="title desc">
+  <title id="title">Locked image placeholder</title>
+  <desc id="desc">A lock icon indicating that the image is protected and requires a password.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="100%" stop-color="#1f2937" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#020617" flood-opacity="0.35" />
+    </filter>
+  </defs>
+  <rect width="800" height="560" rx="36" fill="url(#bg)" />
+  <g opacity="0.12">
+    <circle cx="120" cy="120" r="84" fill="#94a3b8" />
+    <circle cx="700" cy="88" r="56" fill="#cbd5e1" />
+    <circle cx="676" cy="468" r="110" fill="#64748b" />
+  </g>
+  <g filter="url(#shadow)">
+    <rect x="220" y="126" width="360" height="308" rx="28" fill="url(#panel)" stroke="#94a3b8" stroke-opacity="0.25" />
+    <path d="M520 246v-46c0-66-54-120-120-120s-120 54-120 120v46" fill="none" stroke="#e2e8f0" stroke-width="28" stroke-linecap="round" />
+    <rect x="278" y="216" width="244" height="172" rx="24" fill="#e2e8f0" />
+    <circle cx="400" cy="290" r="28" fill="#1e293b" />
+    <rect x="388" y="316" width="24" height="38" rx="12" fill="#1e293b" />
+  </g>
+  <text x="400" y="470" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="34" fill="#e2e8f0" font-weight="700">Locked Image</text>
+  <text x="400" y="506" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="20" fill="#94a3b8">Enter the password to decrypt and display this image</text>
+</svg>

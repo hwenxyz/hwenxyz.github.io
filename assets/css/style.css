@@ -1,0 +1,72 @@
+
+body {
+    --bs-body-font-size: 1.5rem;
+}
+
+.post-content {
+    padding-left: 20px;
+    padding-right: 20px;
+    /*font-size: 2rem;*/
+}
+.post-content p {
+    margin-bottom: 1.5rem;
+}
+.card-table {
+   table-layout: fixed; /* Forces equal column widths */
+   width: 100%; /* Ensures table spans full container */
+}
+.card-img-top {
+    width: 100%;
+    height: 200px;
+    object-fit: cover; /* Ensures the image covers the area without distortion */
+}
+
+.card-text {
+    font-size: 0.75rem;    
+    overflow: hidden; /* Hides overflow content */
+    text-overflow: ellipsis; /* Adds ellipsis for overflow text */
+}
+
+.password-gate,
+.private-content {
+    max-width: 720px;
+}
+
+.password-gate-wrap {
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.protected-images-panel {
+    position: sticky;
+    top: 8px;
+    z-index: 1030;
+    max-width: 560px;
+    margin: 8px auto 16px auto;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    background: rgba(26, 26, 26, 0.92);
+    backdrop-filter: blur(6px);
+}
+
+.protected-images-panel .panel-body {
+    padding: 12px 14px;
+}
+
+.protected-images-panel form {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.protected-images-panel input {
+    flex: 1 1 220px;
+    min-width: 0;
+}
+
+.protected-images-panel .message {
+    width: 100%;
+    font-size: 0.9rem;
+    color: #f2b7b7;
+}
