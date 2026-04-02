@@ -6,7 +6,7 @@
   const FALLBACK_NAME = "encrypted.svg";
   const FALLBACK_PATH = "/assets/images/defaults/" + FALLBACK_NAME;
   const HASH_STORAGE_KEY = "protected-images-sha512";
-  const ENCRYPTION_MAGIC = "HWENC01";
+  const ENCRYPTION_MAGIC_V2 = "HWENC02";
   const PBKDF2_ITERATIONS = 200000;
   const SALT_LENGTH = 16;
   const NONCE_LENGTH = 12;
@@ -65,21 +65,6 @@
       .join("");
   }
 
-  function hexToBytes(hex) {
-    if (!hex || hex.length !== 128) {
-      return null;
-    }
-    const out = new Uint8Array(64);
-    for (let i = 0; i < 64; i += 1) {
-      const byte = parseInt(hex.substr(i * 2, 2), 16);
-      if (Number.isNaN(byte)) {
-        return null;
-      }
-      out[i] = byte;
-    }
-    return out;
-  }
-
   function bytesToAscii(bytes) {
     let out = "";
     for (let i = 0; i < bytes.length; i += 1) {
@@ -88,36 +73,37 @@
     return out;
   }
 
-  function xorDecrypt(buffer, keyBytes) {
-    const bytes = new Uint8Array(buffer);
-    const out = new Uint8Array(bytes.length);
-    for (let i = 0; i < bytes.length; i += 1) {
-      out[i] = bytes[i] ^ keyBytes[i % keyBytes.length];
+  // Cache: masterSaltHex+hashHex -> raw master key bytes
+  const masterKeyCache = {};
+
+  async function getOrDeriveMasterKeyBytes(hashHex, masterSaltBytes) {
+    const cacheKey = hashHex + ":" + Array.from(masterSaltBytes).map(function (b) {
+      return b.toString(16).padStart(2, "0");
+    }).join("");
+    if (!masterKeyCache[cacheKey]) {
+      const passwordMaterial = new TextEncoder().encode(hashHex);
+      const baseKey = await crypto.subtle.importKey("raw", passwordMaterial, "PBKDF2", false, ["deriveBits"]);
+      const bits = await crypto.subtle.deriveBits(
+        { name: "PBKDF2", salt: masterSaltBytes, iterations: PBKDF2_ITERATIONS, hash: "SHA-256" },
+        baseKey,
+        256
+      );
+      masterKeyCache[cacheKey] = new Uint8Array(bits);
     }
-    return out;
+    return masterKeyCache[cacheKey];
   }
 
-  async function deriveAesKey(hashHex, saltBytes) {
-    const passwordMaterial = new TextEncoder().encode(hashHex);
-    const baseKey = await crypto.subtle.importKey(
-      "raw",
-      passwordMaterial,
-      "PBKDF2",
-      false,
-      ["deriveKey"]
-    );
+  async function deriveFileKey(masterKeyBytes, fileSaltBytes) {
+    const baseKey = await crypto.subtle.importKey("raw", masterKeyBytes, "HKDF", false, ["deriveKey"]);
     return crypto.subtle.deriveKey(
       {
-        name: "PBKDF2",
-        salt: saltBytes,
-        iterations: PBKDF2_ITERATIONS,
-        hash: "SHA-256"
+        name: "HKDF",
+        hash: "SHA-256",
+        salt: fileSaltBytes,
+        info: new TextEncoder().encode("hwenc-file-key")
       },
       baseKey,
-      {
-        name: "AES-GCM",
-        length: 256
-      },
+      { name: "AES-GCM", length: 256 },
       false,
       ["decrypt"]
     );
@@ -126,32 +112,26 @@
   async function decryptPayload(buffer, hashHex) {
     const bytes = new Uint8Array(buffer);
 
-    // New authenticated format: magic + salt + nonce + aes-gcm ciphertext
-    if (bytes.length > ENCRYPTION_MAGIC.length + SALT_LENGTH + NONCE_LENGTH + 16) {
-      const magic = bytesToAscii(bytes.slice(0, ENCRYPTION_MAGIC.length));
-      if (magic === ENCRYPTION_MAGIC) {
-        const offsetSalt = ENCRYPTION_MAGIC.length;
-        const offsetNonce = offsetSalt + SALT_LENGTH;
-        const offsetCipher = offsetNonce + NONCE_LENGTH;
-        const salt = bytes.slice(offsetSalt, offsetNonce);
-        const nonce = bytes.slice(offsetNonce, offsetCipher);
-        const ciphertext = bytes.slice(offsetCipher);
-        const aesKey = await deriveAesKey(hashHex, salt);
-        const plainBuffer = await crypto.subtle.decrypt(
-          { name: "AES-GCM", iv: nonce },
-          aesKey,
-          ciphertext
-        );
-        return new Uint8Array(plainBuffer);
-      }
+    // V2 format: magic(7) + master_salt(16) + file_salt(16) + nonce(12) + ciphertext
+    const offsetMasterSalt = ENCRYPTION_MAGIC_V2.length;
+    const offsetFileSalt = offsetMasterSalt + SALT_LENGTH;
+    const offsetNonce = offsetFileSalt + SALT_LENGTH;
+    const offsetCipher = offsetNonce + NONCE_LENGTH;
+    if (bytes.length <= offsetCipher + 16 || bytesToAscii(bytes.slice(0, ENCRYPTION_MAGIC_V2.length)) !== ENCRYPTION_MAGIC_V2) {
+      throw new Error("unsupported file format");
     }
-
-    // Legacy XOR fallback for older built files.
-    const keyBytes = hexToBytes(hashHex);
-    if (!keyBytes) {
-      throw new Error("invalid key material");
-    }
-    return xorDecrypt(buffer, keyBytes);
+    const masterSalt = bytes.slice(offsetMasterSalt, offsetFileSalt);
+    const fileSalt = bytes.slice(offsetFileSalt, offsetNonce);
+    const nonce = bytes.slice(offsetNonce, offsetCipher);
+    const ciphertext = bytes.slice(offsetCipher);
+    const masterKeyBytes = await getOrDeriveMasterKeyBytes(hashHex, masterSalt);
+    const fileKey = await deriveFileKey(masterKeyBytes, fileSalt);
+    const plainBuffer = await crypto.subtle.decrypt(
+      { name: "AES-GCM", iv: nonce },
+      fileKey,
+      ciphertext
+    );
+    return new Uint8Array(plainBuffer);
   }
 
   function detectMime(pathname) {
