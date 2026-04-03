@@ -3,11 +3,6 @@ body {
     --bs-body-font-size: 1.5rem;
 }
 
-.post-content {
-    padding-left: 20px;
-    padding-right: 20px;
-    /*font-size: 2rem;*/
-}
 .post-content p {
     margin-bottom: 1.5rem;
 }
