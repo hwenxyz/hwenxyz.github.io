@@ -3,9 +3,48 @@ body {
     --bs-body-font-size: 1.5rem;
 }
 
+:root {
+    --post-toc-top-offset: 16px;
+}
+
 .post-content p {
     margin-bottom: 1.5rem;
 }
+
+.post-toc {
+    max-height: none;
+}
+
+.post-toc .card-body {
+    overflow: auto;
+}
+
+.post-toc a {
+    display: inline-block;
+}
+
+@media (min-width: 992px) {
+    .post-toc-column {
+        align-self: flex-start;
+    }
+
+    .post-toc {
+        position: sticky;
+        top: var(--post-toc-top-offset);
+        max-height: calc(100vh - (var(--post-toc-top-offset) * 2));
+    }
+
+    .post-toc .card-body {
+        max-height: inherit;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .post-toc {
+        position: static;
+    }
+}
+
 .card-table {
    table-layout: fixed; /* Forces equal column widths */
    width: 100%; /* Ensures table spans full container */
