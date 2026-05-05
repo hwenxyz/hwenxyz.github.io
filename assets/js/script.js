@@ -30,6 +30,8 @@ function initPostToc() {
         return;
     }
 
+    tocList.innerHTML = '';
+
     const headings = Array.from(article.querySelectorAll('h1, h2, h3'));
     if (headings.length === 0) {
         tocRoot.style.display = 'none';
