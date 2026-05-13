@@ -26,16 +26,19 @@ body {
 @media (min-width: 992px) {
     .post-toc-column {
         align-self: flex-start;
-    }
-
-    .post-toc {
         position: sticky;
         top: var(--post-toc-top-offset);
         max-height: calc(100vh - (var(--post-toc-top-offset) * 2));
+        overflow: visible;
+    }
+
+    .post-toc {
+        position: static;
+        max-height: 100%;
     }
 
     .post-toc .card-body {
-        max-height: inherit;
+        max-height: 100%;
     }
 }
 
