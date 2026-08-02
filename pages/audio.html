@@ -24,6 +24,30 @@
                 stopOthersOnPlay: true
             });
         });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll('.audio-player audio').forEach(function (audioEl) {
+                const sourceUrl = audioEl.getAttribute('data-src');
+                if (!sourceUrl) {
+                    return;
+                }
+
+                const loadSource = function () {
+                    if (audioEl.getAttribute('data-loaded') === 'true') {
+                        return;
+                    }
+
+                    const sourceEl = document.createElement('source');
+                    sourceEl.src = sourceUrl;
+                    sourceEl.type = 'audio/mpeg';
+                    audioEl.appendChild(sourceEl);
+                    audioEl.setAttribute('data-loaded', 'true');
+                    audioEl.load();
+                };
+
+                audioEl.addEventListener('play', loadSource, { once: true });
+            });
+        });
     </script>
 </head>
 
@@ -81,9 +105,7 @@
                 <div class="ms-2 me-auto">
                     <div class="fw-bold">妈妈闺蜜A650</div>
                     <div class="audio-player">
-                        <audio>
-                            <source src="/audios/妈妈闺蜜A650.mp3" type="audio/mpeg">
-                        </audio>
+                        <audio preload="none" data-src="/audios/妈妈闺蜜A650.mp3"></audio>
                     </div>
                 </div>
             </div>
@@ -91,9 +113,7 @@
                 <div class="ms-2 me-auto">
                     <div class="fw-bold">妈妈闺蜜A651</div>
                     <div class="audio-player">
-                        <audio>
-                            <source src="/audios/妈妈闺蜜A651.mp3" type="audio/mpeg">
-                        </audio>
+                        <audio preload="none" data-src="/audios/妈妈闺蜜A651.mp3"></audio>
                     </div>
                 </div>
             </div>
@@ -101,9 +121,7 @@
                 <div class="ms-2 me-auto">
                     <div class="fw-bold">妈妈闺蜜A652</div>
                     <div class="audio-player">
-                        <audio>
-                            <source src="/audios/妈妈闺蜜A652.mp3" type="audio/mpeg">
-                        </audio>
+                        <audio preload="none" data-src="/audios/妈妈闺蜜A652.mp3"></audio>
                     </div>
                 </div>
             </div>
@@ -111,9 +129,7 @@
                 <div class="ms-2 me-auto">
                     <div class="fw-bold">妈妈闺蜜A653</div>
                     <div class="audio-player">
-                        <audio>
-                            <source src="/audios/妈妈闺蜜A653.mp3" type="audio/mpeg">
-                        </audio>
+                        <audio preload="none" data-src="/audios/妈妈闺蜜A653.mp3"></audio>
                     </div>
                 </div>
             </div>
@@ -121,9 +137,7 @@
                 <div class="ms-2 me-auto">
                     <div class="fw-bold">开放性世界 A757</div>
                     <div class="audio-player">
-                        <audio>
-                            <source src="/audios/开放性世界 A757.mp3" type="audio/mpeg">
-                        </audio>
+                        <audio preload="none" data-src="/audios/开放性世界 A757.mp3"></audio>
                     </div>
                 </div>
             </div>
@@ -131,9 +145,7 @@
                 <div class="ms-2 me-auto">
                     <div class="fw-bold">开放性世界 A758</div>
                     <div class="audio-player">
-                        <audio>
-                            <source src="/audios/开放性世界 A758.mp3" type="audio/mpeg">
-                        </audio>
+                        <audio preload="none" data-src="/audios/开放性世界 A758.mp3"></audio>
                     </div>
                 </div>
             </div>
@@ -141,9 +153,7 @@
                 <div class="ms-2 me-auto">
                     <div class="fw-bold">开放性世界 A759</div>
                     <div class="audio-player">
-                        <audio>
-                            <source src="/audios/开放性世界 A759.mp3" type="audio/mpeg">
-                        </audio>
+                        <audio preload="none" data-src="/audios/开放性世界 A759.mp3"></audio>
                     </div>
                 </div>
             </div>
@@ -151,9 +161,7 @@
                 <div class="ms-2 me-auto">
                     <div class="fw-bold">开放性世界 A760</div>
                     <div class="audio-player">
-                        <audio>
-                            <source src="/audios/开放性世界 A760.mp3" type="audio/mpeg">
-                        </audio>
+                        <audio preload="none" data-src="/audios/开放性世界 A760.mp3"></audio>
                     </div>
                 </div>
             </div>
@@ -161,9 +169,7 @@
                 <div class="ms-2 me-auto">
                     <div class="fw-bold">开放性世界 A761</div>
                     <div class="audio-player">
-                        <audio>
-                            <source src="/audios/开放性世界 A761.mp3" type="audio/mpeg">
-                        </audio>
+                        <audio preload="none" data-src="/audios/开放性世界 A761.mp3"></audio>
                     </div>
                 </div>
             </div>
@@ -171,9 +177,7 @@
                 <div class="ms-2 me-auto">
                     <div class="fw-bold">蜜月风波255</div>
                     <div class="audio-player">
-                        <audio>
-                            <source src="/audios/蜜月风波255.mp3" type="audio/mpeg">
-                        </audio>
+                        <audio preload="none" data-src="/audios/蜜月风波255.mp3"></audio>
                     </div>
                 </div>
             </div>
@@ -181,9 +185,7 @@
                 <div class="ms-2 me-auto">
                     <div class="fw-bold">陪读妈妈A274</div>
                     <div class="audio-player">
-                        <audio>
-                            <source src="/audios/陪读妈妈A274.mp3" type="audio/mpeg">
-                        </audio>
+                        <audio preload="none" data-src="/audios/陪读妈妈A274.mp3"></audio>
                     </div>
                 </div>
             </div>
@@ -191,9 +193,7 @@
                 <div class="ms-2 me-auto">
                     <div class="fw-bold">陪读妈妈A346</div>
                     <div class="audio-player">
-                        <audio>
-                            <source src="/audios/陪读妈妈A346.mp3" type="audio/mpeg">
-                        </audio>
+                        <audio preload="none" data-src="/audios/陪读妈妈A346.mp3"></audio>
                     </div>
                 </div>
             </div>
