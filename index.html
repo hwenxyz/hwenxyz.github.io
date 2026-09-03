@@ -14,88 +14,100 @@
 <script src="/assets/js/script.js?v="></script></head>
 
 <body>
-  <div class="container-fluid">
-<div id="title" class="text-center">
-        <h1><a href="/" class="text-decoration-none">Awesome!</a></h1>
-        <p>This is an awesome site.</p>
-</div>
-<nav class="navbar navbar-expand-lg bg-body-tertiary navbar-fixed-top mb-4">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/">Awesome!</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link" href="/pages/categories.html" >全部</a>
-                </li>
+  <script>
+    (function () {
+      function fallbackRedirect() {
+        window.location.replace("/pages/categories.html");
+      }
 
-                <li class="nav-item">
-                    <a class="nav-link" href="/pages/category/duan-pian-jing-xuan.html" >精选</a>
-                </li>
+      function parsePostIdValue(post) {
+        if (!post || typeof post !== "object") {
+          return Number.POSITIVE_INFINITY;
+        }
 
-                <li class="nav-item">
-                    <a class="nav-link" href="/pages/category/ma-ma-duan-pian.html" >妈妈</a>
-                </li>
+        var rawId = post.post_id;
+        if (rawId === undefined || rawId === null || rawId === "") {
+          rawId = post.id;
+        }
 
-                <li class="nav-item">
-                    <a class="nav-link" href="/pages/category/nv-er-duan-pian.html" >女儿</a>
-                </li>
+        if (typeof rawId === "number" && Number.isFinite(rawId)) {
+          return rawId;
+        }
 
-                <li class="nav-item">
-                    <a class="nav-link" href="/pages/audio.html" >有声</a>
-                </li>
+        if (typeof rawId === "string") {
+          var trimmed = rawId.trim();
+          if (!trimmed) {
+            return Number.POSITIVE_INFINITY;
+          }
 
-                <li class="nav-item">
-                    <a class="nav-link" href="/pages/galleries.html" >画廊</a>
-                </li>
+          var numeric = Number(trimmed);
+          if (Number.isFinite(numeric)) {
+            return numeric;
+          }
 
-                <li class="nav-item">
-                    <a class="nav-link" href="/pages/about.html" >关于</a>
-                </li>
+          var matches = trimmed.match(/\d+/g);
+          if (matches && matches.length) {
+            var extracted = Number(matches[matches.length - 1]);
+            if (Number.isFinite(extracted)) {
+              return extracted;
+            }
+          }
+        }
 
+        return Number.POSITIVE_INFINITY;
+      }
 
+      fetch("/assets/indexdb.json", { cache: "no-store" })
+        .then(function (response) {
+          if (!response.ok) {
+            throw new Error("indexdb unavailable");
+          }
+          return response.json();
+        })
+        .then(function (indexdb) {
+          var posts = indexdb && Array.isArray(indexdb.posts) ? indexdb.posts : [];
+          if (!posts.length) {
+            fallbackRedirect();
+            return;
+          }
 
-            </ul>
-            <div class="d-flex gap-2 align-items-center">
-                <form class="d-flex" role="search" action="/pages/search" method="get">
-                    <input class="form-control me-2" type="search" placeholder="搜索" aria-label="Search"
-                        id="search-input" name="q"/>
-                    <button class="btn btn-outline-success" type="submit" id="search-button" style="font-size: 1rem; line-height: 1;">🔍</button>
-                </form>
-                <form id="nav-password-form" class="d-flex align-items-center gap-1" autocomplete="off" style="display: none !important;">
-                    <input class="form-control form-control-sm" type="password" id="nav-password-input" autocomplete="off" style="width: 130px;"/>
-                    <button type="submit" id="nav-password-button" class="btn btn-sm btn-outline-secondary" style="font-size: 1rem; line-height: 1;">🔒</button>
-                </form>
-                <button id="nav-password-toggle" class="btn btn-sm btn-outline-success" style="display: none; font-size: 1rem; line-height: 1;">🔓</button>
-            </div>
-        </div>
-    </div>
-</nav>
-<hr>
-    <div class="row">
-      <div class="col-12">
-        <p class="text-center text-body-secondary">暂无文章</p>
-      </div>
-    </div>
+          var postsByCategory = {};
+          posts.forEach(function (post) {
+            var category = post && post.category ? String(post.category).trim() : "";
+            if (!category) {
+              category = "未分类";
+            }
+            if (!postsByCategory[category]) {
+              postsByCategory[category] = [];
+            }
+            postsByCategory[category].push(post);
+          });
 
-<div class="row">
-    <div class="col-12">
-        <hr>
-        <p class="text-center">Copyright &copy; 2026 John Doe. All
-            rights reserved.</p>
-    </div>
-</div>
-<script>
-// Pass encryption configuration to protected-images.js
-window.ENCRYPTION_CONFIG = {
-  enabled: true,
-  folders: ["assets/galleries"]
-};
-</script>
-<script src="/assets/js/protected-images.js"></script>  </div>
+          var categories = Object.keys(postsByCategory);
+          if (!categories.length) {
+            fallbackRedirect();
+            return;
+          }
+
+          var randomCategory = categories[Math.floor(Math.random() * categories.length)];
+          var categoryPosts = postsByCategory[randomCategory];
+          var targetPost = categoryPosts.reduce(function (best, current) {
+            return parsePostIdValue(current) < parsePostIdValue(best) ? current : best;
+          }, categoryPosts[0]);
+          var targetUrl = targetPost && typeof targetPost.url === "string" ? targetPost.url.trim() : "";
+
+          if (!targetUrl) {
+            fallbackRedirect();
+            return;
+          }
+
+          window.location.replace(targetUrl);
+        })
+        .catch(function () {
+          fallbackRedirect();
+        });
+    })();
+  </script>
 </body>
 
 </html>
