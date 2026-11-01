@@ -36,7 +36,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="/pages/category/duan-pian-jing-xuan.html" >精选</a>
+                    <a class="nav-link" href="/pages/category/tian-fang-ye-tan.html" >精选</a>
                 </li>
 
                 <li class="nav-item">
@@ -568,15 +568,16 @@
     <div class="row">
       <div class="col-12 d-flex justify-content-center my-4">
         <div class="d-flex justify-content-between w-50">
-          <a class="btn btn-outline-primary" href="/posts/ma-ma-duan-pian/po14.html" aria-label="Previous">
+          <button id="post-nav-prev" type="button" class="btn btn-outline-primary" aria-label="Previous" disabled>
             &laquo; 上一篇
-          </a>
-           <a class="btn btn-outline-primary" href="/posts/ma-ma-duan-pian/po16.html" aria-label="Next">
+          </button>
+          <button id="post-nav-next" type="button" class="btn btn-outline-primary" aria-label="Next" disabled>
             下一篇 &raquo;
-          </a>
+          </button>
         </div>
       </div>
     </div>
+    <script src="/assets/js/post-nav.js"></script>
 <div class="row">
     <div class="col-12">
         <hr>
@@ -584,13 +585,6 @@
             rights reserved.</p>
     </div>
 </div>
-<script>
-// Pass encryption configuration to protected-images.js
-window.ENCRYPTION_CONFIG = {
-  enabled: true,
-  folders: ["assets/galleries"]
-};
-</script>
 <script src="/assets/js/protected-images.js"></script>  </div>
 </body>
 

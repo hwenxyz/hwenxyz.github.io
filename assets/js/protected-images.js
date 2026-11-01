@@ -39,14 +39,33 @@
     return pathname.indexOf(ASSETS_PREFIX) === 0 && !pathname.endsWith("/" + FALLBACK_NAME);
   }
 
-  function isEncryptedByConfig(pathname) {
-    // Check if image is in one of the configured encryption folders
-    if (!window.ENCRYPTION_CONFIG || !window.ENCRYPTION_CONFIG.enabled || !window.ENCRYPTION_CONFIG.folders) {
+  async function getEncryptionConfig() {
+    try {
+      const response = await fetch("/assets/encryption-config.json", { cache: "no-store" });
+      if (!response.ok) {
+        return { enabled: false, folders: [] };
+      }
+      const parsed = await response.json();
+      if (!parsed || typeof parsed !== "object") {
+        return { enabled: false, folders: [] };
+      }
+      return {
+        enabled: !!parsed.enabled,
+        folders: Array.isArray(parsed.folders) ? parsed.folders : []
+      };
+    } catch (_) {
+      return { enabled: false, folders: [] };
+    }
+  }
+
+  async function isEncryptedByConfig(pathname) {
+    const config = await getEncryptionConfig();
+    if (!config.enabled || !config.folders) {
       return false;
     }
-    const folders = window.ENCRYPTION_CONFIG.folders || [];
+    const folders = config.folders || [];
     for (const folder of folders) {
-      const folderPath = "/" + folder.toLowerCase() + "/";
+      const folderPath = "/" + String(folder).toLowerCase().replace(/^\/+|\/+$/g, "") + "/";
       if (pathname.toLowerCase().startsWith(folderPath)) {
         return true;
       }
@@ -148,13 +167,20 @@
     }
   }
 
-  function collectProtectedImages() {
+  async function collectProtectedImages() {
     const all = Array.from(document.querySelectorAll("img[src]"));
-    return all.filter(function (img) {
+    const results = [];
+    for (const img of all) {
       const path = getPathname(img.getAttribute("src") || "");
-      // Include images under /assets/protected/images/ or those in configured encryption folders
-      return isProtectedImagePath(path) || isEncryptedByConfig(path) || img.hasAttribute("data-encrypted");
-    });
+      if (isProtectedImagePath(path) || img.hasAttribute("data-encrypted")) {
+        results.push(img);
+        continue;
+      }
+      if (await isEncryptedByConfig(path)) {
+        results.push(img);
+      }
+    }
+    return results;
   }
 
   function getNavbarUi() {
@@ -240,8 +266,8 @@
     }
   }
 
-  function bootstrap() {
-    const protectedImages = collectProtectedImages();
+  async function bootstrap() {
+    const protectedImages = await collectProtectedImages();
     const ui = getNavbarUi();
 
     if (protectedImages.length === 0) {
@@ -274,14 +300,12 @@
       return;
     }
 
-    // Unlock icon clicked → forget password, relock images
     ui.toggleButton.addEventListener("click", function () {
       localStorage.removeItem(HASH_STORAGE_KEY);
       resetProtectedImages(protectedImages);
       showInputForm(ui, false);
     });
 
-    // Form submitted → try to decrypt
     ui.form.addEventListener("submit", async function (event) {
       event.preventDefault();
       if (!ui.input.value) {
@@ -298,7 +322,6 @@
       }
     });
 
-    // Check for cached hash on load
     const cachedHash = localStorage.getItem(HASH_STORAGE_KEY);
     if (cachedHash) {
       decryptAll(protectedImages, cachedHash).then(function (success) {
@@ -316,7 +339,9 @@
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", bootstrap);
+    document.addEventListener("DOMContentLoaded", function () {
+      bootstrap();
+    });
     return;
   }
   bootstrap();

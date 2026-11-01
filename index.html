@@ -20,41 +20,28 @@
         window.location.replace("/pages/categories.html");
       }
 
-      function parsePostIdValue(post) {
+      function parsePostSortValue(post) {
         if (!post || typeof post !== "object") {
           return Number.POSITIVE_INFINITY;
         }
 
-        var rawId = post.post_id;
-        if (rawId === undefined || rawId === null || rawId === "") {
-          rawId = post.id;
+        var title = "";
+        if (typeof post.title === "string") {
+          title = post.title.trim();
+        }
+        if (!title && typeof post.name === "string") {
+          title = post.name.trim();
+        }
+        if (!title && typeof post.slug === "string") {
+          title = post.slug.trim();
         }
 
-        if (typeof rawId === "number" && Number.isFinite(rawId)) {
-          return rawId;
+        if (!title) {
+          return Number.POSITIVE_INFINITY;
         }
 
-        if (typeof rawId === "string") {
-          var trimmed = rawId.trim();
-          if (!trimmed) {
-            return Number.POSITIVE_INFINITY;
-          }
-
-          var numeric = Number(trimmed);
-          if (Number.isFinite(numeric)) {
-            return numeric;
-          }
-
-          var matches = trimmed.match(/\d+/g);
-          if (matches && matches.length) {
-            var extracted = Number(matches[matches.length - 1]);
-            if (Number.isFinite(extracted)) {
-              return extracted;
-            }
-          }
-        }
-
-        return Number.POSITIVE_INFINITY;
+        var lower = title.toLowerCase();
+        return lower;
       }
 
       fetch("/assets/indexdb.json", { cache: "no-store" })
@@ -92,7 +79,7 @@
           var randomCategory = categories[Math.floor(Math.random() * categories.length)];
           var categoryPosts = postsByCategory[randomCategory];
           var targetPost = categoryPosts.reduce(function (best, current) {
-            return parsePostIdValue(current) < parsePostIdValue(best) ? current : best;
+            return parsePostSortValue(current) < parsePostSortValue(best) ? current : best;
           }, categoryPosts[0]);
           var targetUrl = targetPost && typeof targetPost.url === "string" ? targetPost.url.trim() : "";
 
